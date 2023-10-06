@@ -7,8 +7,6 @@ public class Consumer
 	
 	public Point respondToBid(Point p)
 	{
-		System.out.println("Consumer: " + myCCurve.toString());
-		
-		return myCCurve.consumerResponse(p, tolerance);
+		return myCCurve.response(p, tolerance, true);
 	}
 }

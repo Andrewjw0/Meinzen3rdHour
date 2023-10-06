@@ -7,8 +7,6 @@ public class Producer
 	
 	public Point respondToBid(Point p)
 	{
-		System.out.println("Producer: " + myPCurve.toString());
-		
-		return myPCurve.producerResponse(p, tolerance);
+		return myPCurve.response(p, tolerance, false);
 	}
 }

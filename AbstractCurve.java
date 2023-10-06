@@ -192,6 +192,11 @@ abstract class AbstractCurve implements CurveInterface
 	
 	private Point closestLessOrEqualQuant(Point p)
 	{
+		if (p.getQuant() > newCurve.get(newCurve.size() - 1).getQuant())
+		{
+			return newCurve.get(newCurve.size() - 1);
+		}
+		
 		Point closest = new Point(0, 0.0);
 		
 		for (int i = 0; i < newCurve.size(); i++)
@@ -203,31 +208,29 @@ abstract class AbstractCurve implements CurveInterface
 				closest = temp;
 			}
 		}
-		
+				
 		return closest;
 	}
 	
-	public Point consumerResponse(Point p, double tolerance)
+	public Point response(Point p, double tolerance, boolean lessThan)
 	{
-		if (p.getPrice() <= (newCurve.get(searchMatchingQuantity(p)).getPrice() + tolerance))
+		int matchingIndex = searchMatchingQuantity(p);
+		
+		if (lessThan)
 		{
-			return p;
+			if (matchingIndex == -1 || p.getPrice() > (newCurve.get(matchingIndex).getPrice() + tolerance))
+			{
+				return closestLessOrEqualQuant(p);
+			} 
 		}
 		else
 		{
-			return closestLessOrEqualQuant(p);
+			if (matchingIndex == -1 || p.getPrice() < (newCurve.get(matchingIndex).getPrice() - tolerance))
+			{
+				return closestLessOrEqualQuant(p);
+			} 
 		}
-	}
-	
-	public Point producerResponse(Point p, double tolerance)
-	{
-		if (p.getPrice() >= (newCurve.get(searchMatchingQuantity(p)).getPrice() - tolerance))
-		{
-			return p;
-		}
-		else
-		{
-			return closestLessOrEqualQuant(p);
-		}
+		
+		return p;
 	}
 }
